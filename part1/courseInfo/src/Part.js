@@ -1,8 +1,16 @@
-export function Part (props){
-
+export function Part ({parts}){
+        console.log(parts);
     return(
-        <p>
-            {props.part} {props.exercises}
-        </p>
+        <>
+        {
+            parts.map(part=>{
+                    const {name, exercises} = part;
+                    return(
+                            <p key={name}>{name} {exercises}</p>
+                    )
+            })
+
+        }
+        </>
     )
 }
