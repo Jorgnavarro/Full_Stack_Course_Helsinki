@@ -1,3 +1,9 @@
+/**
+ * 
+ * @param contactsToShow  receive either a filtered list or a list with all saved contacts. It depends on the conditional set in the parent.
+ * @returns  A list be filtered, or with all values.
+ */
+
 export function Persons({contactsToShow}) {
 
     return (
