@@ -30,3 +30,9 @@
 .phone{
   margin-left: 1rem;
 }
+.container_contact{
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  align-items: center;
+}
