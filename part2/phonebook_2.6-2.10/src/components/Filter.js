@@ -13,7 +13,7 @@ export function Filter({handleFilter, filterName}) {
                 <label htmlFor="filter" className="col-form-label">Filter shown with</label>
             </div>
             <div className="col-4">
-                <input onChange={handleFilter} type="text" className="form-control" name="filter" id='filter'
+                <input onChange={(e)=>handleFilter(e)} type="text" className="form-control" name="filter" id='filter'
                     value={filterName} />
             </div>
         </div>
