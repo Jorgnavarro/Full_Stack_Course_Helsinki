@@ -106,27 +106,26 @@ function App() {
           })
         })
     }else{
-      Swal.fire({
-        title: `${newName} is already added to phonebook, replace the old number with a new one?`,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, update it!'
-      }).then((result)=>{
-        if(result.isConfirmed){
-            const changeContact = {...searchContact, number: newNumber}
-            contactService.update(searchContact.id, changeContact)
-                  .then(contactUpdate =>{
-                     persons.map(person => person.id !== searchContact.id?person: contactUpdate)
-                    })
-
-        }
-
-      })
-    }
-
-
+      const changeContact = {...searchContact, number: newNumber}
+      contactService.update(searchContact.id, changeContact)
+        .then(contactUpdate =>{
+          Swal.fire({
+            title: `${newName} is already added to phonebook, replace the old number with a new one?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, update it!'
+          }).then((result)=>{
+            if(result.isConfirmed){
+              setPersons( persons.map(person => person.id !== searchContact.id?person: contactUpdate))
+            }
+    
+          })
+        })
+      }
+      setNewName("");
+      setNewNumber("");
   }
 
 
