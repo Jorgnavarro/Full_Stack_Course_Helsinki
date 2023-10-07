@@ -1,4 +1,9 @@
-
+/**
+ * 
+ * @param person  Receives the traveling person object from App, list.
+ * @param deleteContact Function set in the parent, receives two parameters, the id to delete and the contact name.
+ * @returns A li element with an h5 and a button to delete the contact.
+ */
 
 export function Person ({person, deleteContact}){
         

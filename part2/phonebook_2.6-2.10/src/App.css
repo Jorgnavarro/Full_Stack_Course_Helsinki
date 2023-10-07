@@ -1,6 +1,6 @@
 .App {
   text-align: center;
-  height: 100vh;
+  height: 100%;
 }
 
 
@@ -35,4 +35,12 @@
   justify-content: center;
   gap: 1rem;
   align-items: center;
+}
+
+.container_contact h5{
+  margin: 0;
+}
+
+.container_contact button{
+    margin: 0;
 }

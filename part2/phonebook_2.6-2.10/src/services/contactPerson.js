@@ -2,6 +2,8 @@ import axios  from "axios";
 
 const baseUrl = "http://localhost:3001/persons";
 
+/*In this file we save the configurations to make requests and receive responses from the server. */
+
 const getAll = () =>{
         const request = axios.get(baseUrl);
         return request.then(response => response.data);

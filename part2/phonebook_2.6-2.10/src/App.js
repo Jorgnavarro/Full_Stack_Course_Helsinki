@@ -6,6 +6,7 @@ import { Filter } from './components/Filter';
 import { PersonForm } from './components/PersonForm';
 import { ListPersons } from './components/ListPersons'
 import contactService from './services/contactPerson';
+import { Notification } from './components/Notification';
 /*you need to install SweetAlert2 with -----npm i sweetalert2-----  */
 
 function App() {
@@ -13,6 +14,8 @@ function App() {
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filterName, setFilterName] = useState("");
+  const [notification, setNotification] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   /*useEffect */
   //The initial values are now fetched from the server, using json-server. That is why useEffect is implemented.
@@ -71,10 +74,10 @@ function App() {
 
   }
 
-  //Constant that captures the value of the input and transforms it into a regular expression
+  //Constant that captures the value of the input and transforms it into a regular expression. By adding the "i" as a second parameter, we remove the sensitive case.
   const expressionFilter = new RegExp(filterName, "i");
 
-
+  //In this case we fix the filter so that it does not return undefined. If the filter name does not match the user in the database return "false".
   const filterList = persons.filter((person) => {
     if (typeof person.name === "string") {
       const nameNormalize = person.name.toLowerCase();
@@ -82,6 +85,8 @@ function App() {
     }
     return false;
   });
+
+  //In our submit function, we have two operations, save a new contact and update an existing contact.
 
   const handleSubmit = function (e) {
     e.preventDefault()
@@ -105,25 +110,47 @@ function App() {
             title: `Your contact ${newName} has been saved successfully`
           })
         })
+        setNotification(
+          `✅Added ${newName}`
+        )
+        setTimeout(()=>{
+          setNotification(null);
+        }, 5000)
     }else{
-      const changeContact = {...searchContact, number: newNumber}
-      contactService.update(searchContact.id, changeContact)
-        .then(contactUpdate =>{
-          Swal.fire({
-            title: `${newName} is already added to phonebook, replace the old number with a new one?`,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, update it!'
-          }).then((result)=>{
-            if(result.isConfirmed){
-              setPersons( persons.map(person => person.id !== searchContact.id?person: contactUpdate))
-            }
-    
+
+      Swal.fire({
+        title: `${newName} is already added to phonebook, replace the old number with a new one?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, update it!'
+      }).then((result)=>{
+        if(result.isConfirmed){
+        //If we confirm the alert action, the service is called and the old number is replaced with the new one.
+          const changeContact = {...searchContact, number: newNumber}
+          contactService.update(searchContact.id, changeContact).then(contactUpdate =>{
+            //Then we render the change on the screen with the map, we indicate by comparing the id that we changed with the rest of the contact list, if it is different, return the contact from the initial list and if not, return the contact that we have updated "contactUpdate".
+            setPersons( persons.map(person => person.id !== searchContact.id?person: contactUpdate));
+            setNotification(
+              `🪄${newName} has been correctly updated...`
+          )
+          setTimeout(()=>{
+            setNotification(null);
+          }, 5000)
+          }).catch(error=>{
+            setErrorMessage(
+                `Information of ${newName} has already been removed from server 😵‍💫`
+            )
+            setTimeout(()=>{
+              setErrorMessage(null);
+            }, 5000)
           })
-        })
-      }
+        }
+
+      })
+ 
+    }
       setNewName("");
       setNewNumber("");
   }
@@ -138,16 +165,18 @@ function App() {
   return (
     <div className="App bg-primary-subtle">
       <div className='container'>
-        <h1 className='text-start'>Phonebook</h1>
+        <h1 className='text-start'>Phonebook📘</h1>
+        <Notification message={notification} className="alert alert-success"/>
+        <Notification message={errorMessage} className="alert alert-danger"/>
         <Filter handleFilter={handleFilter} filterName={filterName} />
-        <h2 className='text-start'>Add a new contact</h2>
+        <h2 className='text-start'>Add a new contact✍🏾</h2>
         <PersonForm handleSubmit={handleSubmit}
           newName={newName}
           handleInputName={handleInputName}
           newNumber={newNumber}
           handleInputNumber={handleInputNumber}
         />
-        <h2 className='mt-4 text-start'>Numbers</h2>
+        <h2 className='mt-4 text-start'>Numbers📞</h2>
         <ListPersons contactsToShow={contactsToShow} deleteContact={deleteContact} />
       </div>
     </div>
