@@ -1,6 +1,6 @@
 import axios  from "axios";
 
-const baseUrl = "http://localhost:3001/persons";
+const baseUrl = "/api/persons";
 
 /*In this file we save the configurations to make requests and receive responses from the server. */
 

@@ -7,7 +7,7 @@ import { PersonForm } from './components/PersonForm';
 import { ListPersons } from './components/ListPersons'
 import contactService from './services/contactPerson';
 import { Notification } from './components/Notification';
-/*you need to install SweetAlert2 with -----npm i sweetalert2-----  */
+
 
 function App() {
   const [persons, setPersons] = useState([]);
@@ -56,7 +56,7 @@ function App() {
       if (result.isConfirmed) {
         contactService.deleteContact(id)
           .then(response => {
-            if (response.status === 200) {
+            if (response.status === 204) {
               const newListContact = persons.filter(person => {
                 return person.id !== id
               })
@@ -129,9 +129,10 @@ function App() {
         if(result.isConfirmed){
         //If we confirm the alert action, the service is called and the old number is replaced with the new one.
           const changeContact = {...searchContact, number: newNumber}
-          contactService.update(searchContact.id, changeContact).then(contactUpdate =>{
+          contactService.update(searchContact.id, changeContact)
+          .then(contactUpdate =>{
             //Then we render the change on the screen with the map, we indicate by comparing the id that we changed with the rest of the contact list, if it is different, return the contact from the initial list and if not, return the contact that we have updated "contactUpdate".
-            setPersons( persons.map(person => person.id !== searchContact.id?person: contactUpdate));
+            setPersons(persons.map(person => person.id !== searchContact.id?person: contactUpdate));
             setNotification(
               `🪄${newName} has been correctly updated...`
           )
@@ -149,7 +150,6 @@ function App() {
         }
 
       })
- 
     }
       setNewName("");
       setNewNumber("");
