@@ -91,7 +91,7 @@ function App() {
   const handleSubmit = function (e) {
     e.preventDefault()
 
-    const searchContact = persons.find(person => {
+    const searchContact = persons?.find(person => {
       const nameNormalize = person.name.toLowerCase();
       return nameNormalize === newName.toLowerCase();
     })
@@ -102,20 +102,31 @@ function App() {
       }
       contactService.create(contactPerson)
         .then(contactCreated => {
-          setPersons([...persons, contactCreated])
-          setNewName("");
-          setNewNumber("");
-          Swal.fire({
-            icon: 'success',
-            title: `Your contact ${newName} has been saved successfully`
-          })
+          if(contactCreated.error === undefined){
+            setPersons([...persons, contactCreated])
+            setNewName("");
+            setNewNumber("");
+            Swal.fire({
+              icon: 'success',
+              title: `Your contact ${newName} has been saved successfully`
+            })
+            setNotification(
+              `✅Added ${newName}`
+            )
+            setTimeout(()=>{
+              setNotification(null);
+            }, 5000)
+          }else{
+            setErrorMessage(
+              `🚨 ${contactCreated.error}`
+            )
+            setTimeout(()=>{
+              setErrorMessage(null);
+            }, 5000)
+          }
+          
         })
-        setNotification(
-          `✅Added ${newName}`
-        )
-        setTimeout(()=>{
-          setNotification(null);
-        }, 5000)
+        
     }else{
 
       Swal.fire({

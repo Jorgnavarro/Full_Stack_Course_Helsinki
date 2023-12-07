@@ -10,7 +10,7 @@ export function Filter({handleFilter, filterName}) {
     return (
         <div className="row g-3 align-items-center">
             <div className="col-auto">
-                <label htmlFor="filter" className="col-form-label">Filter shown with</label>
+                <label htmlFor="filter" className="col-form-label">Filter contacts by letter or name: </label>
             </div>
             <div className="col-4">
                 <input onChange={(e)=>handleFilter(e)} type="text" className="form-control" name="filter" id='filter'
