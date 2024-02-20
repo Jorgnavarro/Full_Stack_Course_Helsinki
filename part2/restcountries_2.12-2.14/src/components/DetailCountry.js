@@ -4,20 +4,20 @@ import { getId } from "../utils/getId";
 
 /**
  * 
- * @param countrie Receives the object with the country information brought from the country Rest API. 
+ * @param country Receives the object with the country information brought from the country Rest API. 
  * @returns A card with the details of the two APIS, weather and Rest countries.
  */
-export function DetailCountrie({ countrie }) {
-    console.log(countrie);
+export function DetailCountry({ country }) {
+    console.log(country);
     const api_key = process.env.REACT_APP_API_WEATHER
-    const languagesArr = Object.values(countrie.languages);
+    const languagesArr = Object.values(country.languages);
     console.log(languagesArr);
     const [dataWheater, setDataWheater] = useState({})
     console.log(dataWheater);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        axios.get(`http://api.weatherstack.com/current?access_key=${api_key}&query=${countrie.name.common}`)
+        axios.get(`http://api.weatherstack.com/current?access_key=${api_key}&query=${country.name.common}`)
             .then(response => {
                 setDataWheater(response.data)
                 setLoading(false);
@@ -26,16 +26,16 @@ export function DetailCountrie({ countrie }) {
                 console.error("Error fetching weather data: ", error);
                 setLoading(false);
             })
-    }, [api_key, countrie.name.common])
+    }, [api_key, country.name.common])
     console.log(loading);
     return (
         <div className="container m-2 row justify-content-center">
             <div className="card " id="card-countrie" style={{ width: "18rem" }}>
-                <img src={countrie.flags.png} className="card-img-top" alt="Countrie Flag" id="img-card" />
+                <img src={country.flags.png} className="card-img-top" alt="Countrie Flag" id="img-card" />
                 <div className="card-body">
-                    <h5 className="card-title">{countrie.name.common}</h5>
-                    <p className="card-text">Capital: {countrie.capital} </p>
-                    <p className="card-text">Population: {countrie.population}</p>
+                    <h5 className="card-title">{country.name.common}</h5>
+                    <p className="card-text">Capital: {country.capital} </p>
+                    <p className="card-text">Population: {country.population}</p>
                     <h6>Languages</h6>
                 </div>
                 <ul className="list-group list-group-flush">
@@ -47,7 +47,7 @@ export function DetailCountrie({ countrie }) {
                 </ul>
                 <div className="card-body">
                     <h5 className="card-title">
-                        Weather in {countrie.capital}
+                        Weather in {country.capital}
                     </h5>
                     {loading ? 
                     <div className="spinner-border text-secondary" role="status">
